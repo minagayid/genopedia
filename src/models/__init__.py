@@ -5,13 +5,9 @@ Predefined architectures for genomics tasks.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import List, Sequence
-
-try:
-    import numpy as np
-except Exception:  # pragma: no cover - optional
-    np = None  # type: ignore
 
 
 @dataclass
@@ -21,8 +17,7 @@ class KmerConfig:
 
 
 def kmer_counts(sequence: str, k: int = 3) -> dict[str, int]:
-    if np is not None:
-        raise RuntimeError("numpy is required for counting.")
+    """Count overlapping k-mers in ``sequence`` (pure Python, no deps)."""
     counts: dict[str, int] = {}
     for i in range(len(sequence) - k + 1):
         kmer = sequence[i : i + k]
@@ -54,17 +49,26 @@ class DNAClassifier:
         self.classes = classes
 
     def predict(self, sequence: str) -> str:
+        """Return the most likely class label for ``sequence``."""
+        return self.predict_proba(sequence)[0][0]
+
+    def predict_proba(self, sequence: str) -> list[tuple[str, float]]:
+        """Return (label, log-likelihood) pairs sorted best-first.
+
+        Uses a multinomial naive-Bayes score over k-mer counts with a small
+        floor probability for k-mers unseen during training, so unfamiliar
+        sequences never produce a math-domain error.
+        """
         if not getattr(self, "classes", None):
             raise RuntimeError("Classifier must be trained before prediction.")
         counts = kmer_counts(sequence, self.k)
-        scores = {}
+        unseen_floor = math.log(1e-9)
+        scores: dict[str, float] = {}
         for c in self.classes:
             log_prob = 0.0
-            vocabulary = set(self.probabilities[c])
+            class_probs = self.probabilities[c]
             for kmer, count in counts.items():
-                prob = self.probabilities[c].get(kmer, 1 / (sum(self.probabilities[c].values()) + len(vocabulary)))
-                log_prob += count * (np.log(prob) if np is not None else __import__('math').log(prob))
-            for kmer in (set(counts) - vocabulary):
-                log_prob += counts[kmer] * __import__('math').log(1e-9)
+                prob = class_probs.get(kmer)
+                log_prob += count * (math.log(prob) if prob else unseen_floor)
             scores[c] = log_prob
-        return max(scores, key=scores.get)
+        return sorted(scores.items(), key=lambda kv: kv[1], reverse=True)

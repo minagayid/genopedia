@@ -5,24 +5,43 @@ Handles DNA/RNA sequence loading, preprocessing, variant detection,
 and color-coded visualization.
 """
 
-import os
-import re
-import json
-import hashlib
 import logging
-from typing import Dict, List, Tuple, Optional, Union
-from dataclasses import dataclass, field
-from collections import Counter
-import numpy as np
+import random
+from typing import List, Optional
+from dataclasses import dataclass
 
-# Bioinformatics
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC
+try:  # numpy is optional; a stdlib fallback keeps synthetic generation runnable
+    import numpy as np
+except Exception:  # pragma: no cover - exercised only when numpy is absent
+    np = None
+
+# Bioinformatics. Biopython is optional: it is only needed to parse real
+# FASTA/FASTQ files. All sequence analysis works on plain strings without it,
+# so the pipeline stays runnable in minimal environments.
+try:
+    from Bio import SeqIO
+    from Bio.Seq import Seq
+    from Bio.SeqRecord import SeqRecord
+    try:  # biopython >= 1.80 replaced GC() with gc_fraction()
+        from Bio.SeqUtils import gc_fraction as _gc_fraction
+
+        def _biopython_gc(seq: str) -> float:
+            return _gc_fraction(Seq(seq)) * 100.0
+    except ImportError:  # pragma: no cover - very old biopython
+        from Bio.SeqUtils import GC as _GC
+
+        def _biopython_gc(seq: str) -> float:
+            return float(_GC(Seq(seq)))
+
+    BIOPYTHON_AVAILABLE = True
+except Exception:  # pragma: no cover - exercised only when biopython is absent
+    SeqIO = None
+    Seq = None
+    SeqRecord = None
+    _biopython_gc = None
+    BIOPYTHON_AVAILABLE = False
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -88,17 +107,27 @@ class GenomicsDataLoader:
         self.annotations = {}
         logger.info(f"GenomicsDataLoader initialized with data_dir: {data_dir}")
     
-    def load_fasta(self, filepath: str, label: str = None) -> SeqRecord:
-        """Load a FASTA file."""
+    @staticmethod
+    def _require_biopython() -> None:
+        if not BIOPYTHON_AVAILABLE:
+            raise RuntimeError(
+                "Biopython is required to parse FASTA/FASTQ files. "
+                "Install it with `pip install biopython`."
+            )
+
+    def load_fasta(self, filepath: str, label: str = None):
+        """Load a FASTA file (requires biopython)."""
+        self._require_biopython()
         logger.info(f"Loading FASTA: {filepath}")
         records = list(SeqIO.parse(filepath, "fasta"))
         if label:
             self.sequences[label] = records
         logger.info(f"Loaded {len(records)} records from {filepath}")
         return records
-    
-    def load_fastq(self, filepath: str) -> List[SeqRecord]:
-        """Load FASTQ sequencing reads."""
+
+    def load_fastq(self, filepath: str):
+        """Load FASTQ sequencing reads (requires biopython)."""
+        self._require_biopython()
         logger.info(f"Loading FASTQ: {filepath}")
         records = list(SeqIO.parse(filepath, "fastq"))
         logger.info(f"Loaded {len(records)} reads from {filepath}")
@@ -126,17 +155,21 @@ class GenomicsDataLoader:
         self.variants.extend(variants)
         return variants
     
+    @staticmethod
+    def _random_sequence(bases: List[str], length: int) -> str:
+        if np is not None:
+            return "".join(np.random.choice(bases, size=length))
+        return "".join(random.choice(bases) for _ in range(length))
+
     def generate_synthetic_dna(self, length: int = 1000, label: str = "synthetic") -> str:
         """Generate a synthetic DNA sequence for testing."""
-        bases = ['A', 'T', 'G', 'C']
-        sequence = ''.join(np.random.choice(bases, size=length))
+        sequence = self._random_sequence(["A", "T", "G", "C"], length)
         logger.info(f"Generated synthetic DNA sequence of length {length}")
         return sequence
-    
+
     def generate_synthetic_rna(self, length: int = 1000, label: str = "synthetic_rna") -> str:
         """Generate a synthetic RNA sequence (with Uracil instead of Thymine)."""
-        bases = ['A', 'U', 'G', 'C']
-        sequence = ''.join(np.random.choice(bases, size=length))
+        sequence = self._random_sequence(["A", "U", "G", "C"], length)
         logger.info(f"Generated synthetic RNA sequence of length {length}")
         return sequence
 
@@ -152,8 +185,17 @@ class SequenceAnalyzer:
         return [self.config.COLOR_MAP.get(base, self.config.N_COLOR) for base in sequence]
     
     def calculate_gc_content(self, sequence: str) -> float:
-        """Calculate GC content of a sequence."""
-        return GC(Seq(sequence))
+        """Calculate GC content of a sequence as a percentage (0-100).
+
+        Uses biopython when available, otherwise a pure-Python count so the
+        analysis works without the optional dependency.
+        """
+        if not sequence:
+            return 0.0
+        if BIOPYTHON_AVAILABLE:
+            return _biopython_gc(sequence)
+        gc = sum(1 for base in sequence.upper() if base in ("G", "C"))
+        return gc / len(sequence) * 100.0
     
     def find_motifs(self, sequence: str, motif: str) -> List[int]:
         """Find all occurrences of a motif in a sequence."""

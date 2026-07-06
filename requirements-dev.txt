@@ -1,0 +1,6 @@
+# Minimal dependencies to run the test suite and core pipeline.
+# The full requirements.txt pins the heavy ML/vis stack (tensorflow, torch,
+# etc.); the genomics pipeline itself only needs these.
+biopython==1.85
+numpy>=1.26
+pytest>=8.3

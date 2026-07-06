@@ -21,11 +21,9 @@
 ```
 genopedia/
 ├── src/
-│   ├── genomics/          # Core genomics pipeline
-│   ├── models/            # ML models
-│   ├── api/               # FastAPI backend
-│   └── utils/             # Utilities
-├── notebooks/             # Jupyter notebooks
+│   ├── genomics/          # Core genomics pipeline (loader, analyzer, visualizer)
+│   ├── models/            # ML models (k-mer naive-Bayes DNA classifier)
+│   └── pipeline.py        # Analysis orchestrator with reasoning trace
 ├── tests/                 # Unit tests
 ├── examples/              # Demo scripts
 ├── docs/                  # Documentation
@@ -34,14 +32,29 @@ genopedia/
 
 ## 🚀 Quick Start
 ```bash
-cd ~/Desktop/genopedia
-pip install -r requirements.txt
+# Minimal install (core pipeline + tests). Biopython is optional and only
+# needed to parse real FASTA/FASTQ files; all sequence analysis works without it.
+pip install -r requirements-dev.txt
 
-# Run a demo
+# Run the demo pipeline
 python examples/demo_genomics.py
 
 # Run tests
-python -m pytest tests/
+python -m pytest -v
+```
+
+## Pipeline
+
+`GenomicsPipeline` ties the loader, analyzer and visualizer into one
+inspectable run. It returns an `AnalysisReport` carrying results **and** a
+human-readable reasoning trace of every stage:
+
+```python
+from src.pipeline import GenomicsPipeline
+
+report = GenomicsPipeline().run(sample="TATAATGCCGTAG", reference="TATAATGCCGTAC")
+report.summary()      # gc_content, motif hits, functional regions, variant counts
+report.reasoning      # ["Analyzing sample of length 13", "GC content: ...", ...]
 ```
 
 ## 🔬 Testing
