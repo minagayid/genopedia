@@ -1,22 +1,5 @@
-biopython==1.85
-numpy==1.26.4
-pandas==2.2.2
-scikit-learn==1.6.1
-tensorflow==2.17.0
-torch==2.4.1
-matplotlib==3.9.2
-seaborn==0.13.2
-plotly==5.24.1
-fastapi==0.115.0
-uvicorn==0.30.6
-sqlalchemy==2.0.34
-neo4j==5.25.0
-jupyter==1.1.1
-scipy==1.14.1
-tqdm==4.66.5
-pytest==8.3.3
-black==24.8.0
-flake8==7.1.1
-wandb==0.18.0
-gradio==5.0.1
-flask==2.2.5
+# Genopedia core intentionally has no third-party runtime dependencies.
+# Optional integrations are declared in pyproject.toml:
+#   python -m pip install -e .[bio]
+#   python -m pip install -e .[ml]
+#   python -m pip install -e .[dev]

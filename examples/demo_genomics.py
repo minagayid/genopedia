@@ -1,14 +1,14 @@
-"""GenoProject - resume point."""
-from GenoProject.src.genomics import GenomicsDataLoader, SequenceAnalyzer, GenomicsVisualizer
-from GenoProject.src.models import DNAClassifier
+"""Run the dependency-free Genopedia demonstration from a fresh checkout."""
 
-loader = GenomicsDataLoader("data/genomics")
-sequence = loader.generate_synthetic_dna(120)
-analyzer = SequenceAnalyzer()
-variants = analyzer.detect_variants("ATGCCGTAG", "ATGTCGTAG")
-visualizer = GenomicsVisualizer()
+from pathlib import Path
+import sys
 
-print("[GenoProject] sequence:", sequence)
-print("[GenoProject] variants:", [v.to_dict() for v in variants])
-print("[GenoProject] html preview:")
-print(visualizer.generate_color_html(sequence, 20))
+
+# Make ``python examples/demo_genomics.py`` work before editable installation.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from genopedia.cli import main  # noqa: E402
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(["demo", "--length", "120"]))
