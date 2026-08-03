@@ -94,6 +94,10 @@ logs/
 *.tmp
 *~
 
+# Genopedia local reports
+genopedia-report.html
+genopedia-comparison.html
+
 # Data
 data/
 *.npy

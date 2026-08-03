@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genopedia"
+version = "0.2.0"
+description = "Offline-first DNA/RNA sequence inspection and reporting toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Genopedia Project" }]
+dependencies = []
+
+[project.optional-dependencies]
+bio = ["biopython>=1.85,<2"]
+ml = ["numpy>=1.26", "scikit-learn>=1.4"]
+dev = ["pytest>=8", "black>=24", "flake8>=7"]
+
+[project.scripts]
+genopedia = "genopedia.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["genopedia*"]
+
+[tool.black]
+line-length = 100
+
