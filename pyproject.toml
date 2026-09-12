@@ -23,6 +23,9 @@ genopedia = "genopedia.cli:main"
 [tool.setuptools.packages.find]
 include = ["genopedia*"]
 
+[tool.setuptools.package-data]
+genopedia = ["reference-manifest.json"]
+
 [tool.black]
 line-length = 100
 

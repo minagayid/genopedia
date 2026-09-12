@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import html
+import json
 from pathlib import Path
 from typing import Iterable
 
+from .anomalies import SequenceAnomaly
 from .core import QualityReport, SequenceRecord, Variant
+from .correction import CorrectionSuggestion
+from .references import ReferencePlan
 
 
 BASE_COLORS = {
@@ -99,15 +103,68 @@ def _variant_section(variants: Iterable[Variant]) -> str:
     )
 
 
+def _anomaly_section(anomalies: Iterable[SequenceAnomaly]) -> str:
+    rows = []
+    for anomaly in anomalies:
+        rows.append(
+            "<tr>"
+            f"<td>{html.escape(anomaly.identifier)}</td>"
+            f"<td>{html.escape(anomaly.category)}</td>"
+            f"<td>{html.escape(anomaly.severity)}</td>"
+            f"<td>{html.escape(anomaly.evidence)}</td>"
+            f"<td>{html.escape(anomaly.suggested_action)}</td>"
+            "</tr>"
+        )
+    if not rows:
+        return "<p>No sequence-quality anomaly signals were detected.</p>"
+    return (
+        '<table><thead><tr><th>Sample</th><th>Signal</th><th>Severity</th><th>Evidence</th>'
+        '<th>Suggested next action</th></tr></thead><tbody>'
+        + "".join(rows)
+        + "</tbody></table>"
+    )
+
+
+def _correction_section(suggestions: Iterable[CorrectionSuggestion]) -> str:
+    rows = []
+    for suggestion in suggestions:
+        rows.append(
+            "<tr>"
+            f"<td>{html.escape(suggestion.chromosome)}:{suggestion.position}</td>"
+            f"<td>{html.escape(suggestion.observed)}</td>"
+            f"<td>{html.escape(suggestion.candidate or 'none')}</td>"
+            f"<td>{html.escape(suggestion.status)}</td>"
+            f"<td>{html.escape('; '.join(suggestion.evidence))}</td>"
+            f"<td>{html.escape(suggestion.next_action)}</td>"
+            "</tr>"
+        )
+    if not rows:
+        return "<p>No correction-planning candidates were supplied.</p>"
+    return (
+        '<table><thead><tr><th>Location</th><th>Observed</th><th>Candidate</th><th>Status</th>'
+        '<th>Evidence</th><th>Next action</th></tr></thead><tbody>'
+        + "".join(rows)
+        + "</tbody></table>"
+    )
+
+
 def render_html_report(
     records: Iterable[SequenceRecord],
     variants: Iterable[Variant] = (),
     quality_reports: Iterable[QualityReport] = (),
+    sequence_anomalies: Iterable[SequenceAnomaly] = (),
+    correction_suggestions: Iterable[CorrectionSuggestion] = (),
+    reference_plan: ReferencePlan | None = None,
     title: str = "Genopedia report",
 ) -> str:
     records = list(records)
     variants = list(variants)
     quality_reports = list(quality_reports)
+    sequence_anomalies = list(sequence_anomalies)
+    correction_suggestions = list(correction_suggestions)
+    reference_section = "No reference plan supplied."
+    if reference_plan:
+        reference_section = html.escape(json.dumps(reference_plan.to_dict(), indent=2, sort_keys=True))
     legend = "".join(
         f'<span class="legend-item"><span class="swatch" style="background:{color}"></span>{name} ({base})</span>'
         for base, (color, name) in BASE_COLORS.items()
@@ -139,7 +196,10 @@ article, section {{ background: white; border: 1px solid #d9e2ec; border-radius:
 <section><h2>Color legend</h2><div class="legend">{legend}</div></section>
 <section><h2>Sequences</h2>{''.join(sequence_sections)}</section>
 <section><h2>Quality control</h2>{_quality_section(quality_reports)}</section>
+<section><h2>Sequence-quality anomaly signals</h2><p>These are research QC signals, not diagnoses.</p>{_anomaly_section(sequence_anomalies)}</section>
+<section><h2>Reference selection plan</h2><p>Metadata-first source selection for research comparison; access terms remain provider-specific.</p><pre>{reference_section}</pre></section>
 <section><h2>Observed variants</h2>{_variant_section(variants)}</section>
+<section><h2>Correction planning</h2><p>Review-only planning; no automatic sequence edit is performed.</p>{_correction_section(correction_suggestions)}</section>
 </body></html>"""
 
 

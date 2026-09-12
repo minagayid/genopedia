@@ -1,5 +1,7 @@
 """Genopedia: lightweight, offline-first genomics analysis tools."""
 
+from .anomalies import SequenceAnomaly, SequenceAnomalyDetector
+from .correction import CorrectionPlanner, CorrectionSuggestion
 from .core import (
     FunctionalRegion,
     QualityReport,
@@ -7,12 +9,20 @@ from .core import (
     SequenceRecord,
     Variant,
 )
+from .references import ReferencePlan, ReferenceRegistry, ReferenceSource
 
 __all__ = [
     "FunctionalRegion",
     "QualityReport",
     "SequenceAnalyzer",
     "SequenceRecord",
+    "SequenceAnomaly",
+    "SequenceAnomalyDetector",
+    "CorrectionPlanner",
+    "CorrectionSuggestion",
+    "ReferencePlan",
+    "ReferenceRegistry",
+    "ReferenceSource",
     "Variant",
 ]
 

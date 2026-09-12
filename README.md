@@ -10,6 +10,11 @@ The current release provides:
 - Sequence comparison with substitutions, insertions, deletions, and replacements.
 - A deterministic dependency-free k-mer classifier.
 - Self-contained HTML/SVG reports and JSON summaries.
+- A versioned, metadata-only reference registry covering authoritative,
+  diversity, empirical-read, benchmark, RNA, microbial, human, and
+  contamination sources.
+- Deterministic sequence-quality anomaly signals and evidence-gated correction
+  planning that never rewrites the observed sequence.
 - A research-only interpretation boundary: no diagnosis, treatment advice, or proposed DNA edits.
 
 PCR and sequencing instruments are vendor-specific. Genopedia accepts exported files by default and exposes a clean boundary for future vendor adapters; it does not pretend that generic software can control every PCR device without its model and communication protocol.
@@ -31,6 +36,19 @@ python -m genopedia analyze sample.fasta --output sample-report.html --json-outp
 python -m genopedia analyze sample.fastq --output reads-report.html
 python -m genopedia analyze variants.vcf.gz --output variants-report.html
 ```
+
+Inspect the reference registry without downloading data:
+
+```powershell
+python -m genopedia reference validate
+python -m genopedia reference search --molecule RNA --role rna_family --json
+python -m genopedia reference plan --purpose correction --molecule DNA --json
+```
+
+See [REFERENCE_ENGINE_PLAN.md](REFERENCE_ENGINE_PLAN.md) for the source
+catalog, access/licensing boundary, implemented baseline, and production
+upgrade path. The registry is deliberately metadata-only: large, controlled,
+or non-redistributable datasets must be acquired under their provider terms.
 
 The convenience launcher also works directly from the repository root:
 
