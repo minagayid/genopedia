@@ -5,6 +5,7 @@ Genopedia is an offline-first toolkit for inspecting DNA/RNA sequences and produ
 The current release provides:
 
 - Streaming FASTA, FASTQ, VCF, VCF.GZ, and raw-sequence readers.
+- Bounded input parsing with configurable compressed/decoded byte, record, line, and per-record allele limits.
 - Sequence validation, GC fraction, ambiguous-base counts, Phred summaries, and warnings.
 - Overlapping motif search and transparent candidate-region heuristics.
 - Sequence comparison with substitutions, insertions, deletions, and replacements.
@@ -84,6 +85,17 @@ python -m pip install -e .[dev]  # pytest, formatting, and lint tools
 Sequence comparisons use zero-based positions. VCF positions remain one-based and are marked as such in variant metadata. Variant interpretations are `unknown` unless supplied evidence matches a supported evidence label. Candidate promoters and start codons are heuristics, not gene annotation.
 
 Genopedia is intended for research and engineering workflows. Any clinical interpretation, laboratory action, or genetic intervention requires validated laboratory methods and qualified human review.
+
+## Input resource limits
+
+Readers default to a maximum of 64 MiB compressed input, 128 MiB decoded input, 50,000 records, 5 million sequence/allele bases per record, 1 million total bases per file, 1 million total FASTQ quality symbols, and 8 MiB per line. VCF records are also limited to 1,000 alternate alleles and 1,000 INFO entries. These defaults bound gzip expansion and memory use while retaining support for ordinary local datasets. Trusted workflows with larger files can pass a customized `InputLimits` value to `read_input`, `read_sequence_file`, or a format-specific reader; exceeding a limit raises `InputLimitError`.
+
+```python
+from genopedia.io import InputLimits, read_input
+
+limits = InputLimits(max_decompressed_bytes=512 * 1024 * 1024)
+data = read_input("large-sample.fasta", limits=limits)
+```
 
 ## Project layout
 

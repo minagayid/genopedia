@@ -10,9 +10,13 @@ from .core import (
     Variant,
 )
 from .references import ReferencePlan, ReferenceRegistry, ReferenceSource
+from .io import DEFAULT_INPUT_LIMITS, InputLimitError, InputLimits
 
 __all__ = [
     "FunctionalRegion",
+    "DEFAULT_INPUT_LIMITS",
+    "InputLimitError",
+    "InputLimits",
     "QualityReport",
     "SequenceAnalyzer",
     "SequenceRecord",
