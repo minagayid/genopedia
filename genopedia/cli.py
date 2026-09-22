@@ -15,6 +15,7 @@ from .io import read_input
 from .reporting import render_html_report, write_html_report
 from .references import DEFAULT_MANIFEST, ReferencePlan, ReferenceRegistry
 from .catalog import read_jsonl
+from .jev_pipeline import write_jev_plan
 from .schema import schema_json
 
 
@@ -132,6 +133,24 @@ def build_parser() -> argparse.ArgumentParser:
     schema_export.add_argument("--output", type=Path, required=True)
     schema_validate = schema_commands.add_parser("validate", help="validate a JSONL catalog")
     schema_validate.add_argument("input", type=Path)
+
+    jev = commands.add_parser("jev", help="plan a guarded Jev run for RefSeq Release 237")
+    jev_commands = jev.add_subparsers(dest="jev_command", required=True)
+    jev_plan = jev_commands.add_parser(
+        "plan",
+        help="write an auditable JSON plan and optional PostgreSQL/JeV SQL; does not contact Jev",
+    )
+    jev_plan.add_argument("--semantic-query", required=True)
+    jev_plan.add_argument("--output", type=Path, required=True)
+    jev_plan.add_argument("--sql-output", type=Path)
+    jev_plan.add_argument("--batch-size", type=int, default=20)
+    jev_plan.add_argument("--max-rows-per-statement", type=int, default=100_000)
+    jev_plan.add_argument("--source-table", default="refseq237.protein_catalog")
+    jev_plan.add_argument(
+        "--full-release-scan",
+        action="store_true",
+        help="mark that the caller intends a complete scan; still requires count and transfer approval",
+    )
     return parser
 
 
@@ -197,6 +216,18 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0
             records = read_jsonl(args.input)
             print(json.dumps({"status": "valid", "records": len(records)}, sort_keys=True))
+            return 0
+        if args.command == "jev":
+            plan = write_jev_plan(
+                args.output,
+                semantic_query=args.semantic_query,
+                sql_output=args.sql_output,
+                batch_size=args.batch_size,
+                max_rows_per_statement=args.max_rows_per_statement,
+                source_table=args.source_table,
+                full_release_scan=args.full_release_scan,
+            )
+            print(json.dumps({"plan_id": plan["plan_id"], "status": plan["status"]}, sort_keys=True))
             return 0
         if args.command == "reference":
             return _run_reference_command(args)

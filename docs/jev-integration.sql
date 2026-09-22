@@ -2,6 +2,8 @@
 -- This file is intentionally not required by the offline-first core.
 -- Jev scores are derived, provider/model-dependent signals, not canonical
 -- biological evidence and not a replacement for deterministic indexes.
+-- For the RefSeq Release 237 sort/rank/classify/route/map plan, see
+-- docs/jev-refseq-release-237-plan.json and docs/jev-refseq-release-237.sql.
 
 -- CREATE EXTENSION jev CASCADE;
 

@@ -95,7 +95,7 @@ Partition and sort before building specialized indexes. The canonical order is d
 
 K-mer/minimizer search, ANN, CSR/CSC, and Iceberg/Parquet exports are intentionally deferred until a real workload and release scale justify them. Their parameter choices must be recorded in `derived_index_manifest`.
 
-Jev is optional. The current PostgreSQL extension can score or classify rows using a natural-language condition, but its documentation says it streams rows and requires no index. Genopedia therefore treats Jev as a provider/model-dependent semantic ranking layer with a deterministic fallback, not as the primary biological index. See [`docs/jev-integration.sql`](jev-integration.sql).
+Jev is optional. The current PostgreSQL extension can filter, rank, score, and classify rows using natural-language conditions, but it streams rows and requires no index. Genopedia therefore treats Jev as a provider/model-dependent semantic layer with deterministic release/count checks, capped row-range partitions, persisted raw evaluations, confidence, model/query metadata, and ID tie-breaks. The Release 237 plan estimates 24,764,520 Jev requests per operation at the documented batch size of 20, so a full pass requires explicit transfer and spend approval. See [`docs/jev-integration.sql`](jev-integration.sql) and [`docs/jev-refseq-release-237.sql`](jev-refseq-release-237.sql).
 
 ## Source roles
 

@@ -57,6 +57,16 @@ python -m genopedia schema export --output schema/genopedia_protein_data.schema.
 python -m genopedia schema validate examples/protein_catalog.jsonl
 ```
 
+Generate the guarded Jev plan for RefSeq Release 237:
+
+```powershell
+python -m genopedia jev plan --semantic-query "relevance to a specified molecular function or protein-of-interest workflow" --output docs/jev-refseq-release-237-plan.json --sql-output docs/jev-refseq-release-237.sql --full-release-scan
+```
+
+This writes a reviewable plan and PostgreSQL script; it does not contact Jev or
+send records to a third party until PostgreSQL, Jev, the staged release, and
+operator approval are present.
+
 See [REFERENCE_ENGINE_PLAN.md](REFERENCE_ENGINE_PLAN.md) for the source
 catalog, access/licensing boundary, implemented baseline, and production
 upgrade path. The registry is deliberately metadata-only: large, controlled,

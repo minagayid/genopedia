@@ -1,0 +1,135 @@
+{
+  "execution": {
+    "batch_size": 20,
+    "concurrency": 16,
+    "deterministic_tiebreaker": "protein_id ASC",
+    "estimated_requests_all_operations": 123822600,
+    "estimated_requests_per_operation": 24764520,
+    "estimated_statements_per_operation": 4953,
+    "jev_version": "0.2.0 or pinned compatible release",
+    "max_rows_per_statement": 100000,
+    "partition_keys": [
+      "release_number",
+      "source_division",
+      "organism_taxid",
+      "sequence_sha256_prefix"
+    ],
+    "postgresql_versions": [
+      14,
+      15,
+      16,
+      17
+    ],
+    "requires_capped_partition_loop": true,
+    "requires_deterministic_prepartition": true
+  },
+  "full_release_scan_requested": true,
+  "operations": [
+    {
+      "authoritative": false,
+      "deterministic_tiebreaker": "protein_id ASC",
+      "function": "jev_score_norm",
+      "name": "sort",
+      "options": [
+        "irrelevant",
+        "possible",
+        "strong"
+      ],
+      "output_table": "protein_jev_sort",
+      "question": "how strongly is this protein relevant to a stated molecular-function query?"
+    },
+    {
+      "authoritative": false,
+      "deterministic_tiebreaker": "protein_id ASC",
+      "function": "jev_prob",
+      "name": "rank",
+      "options": [],
+      "output_table": "protein_jev_rank",
+      "question": "how likely is this protein to be relevant to the stated molecular-function query?"
+    },
+    {
+      "authoritative": false,
+      "deterministic_tiebreaker": "protein_id ASC",
+      "function": "jev_choice",
+      "name": "classify",
+      "options": [
+        "enzyme_or_metabolism",
+        "signaling_or_regulation",
+        "transport_or_membrane",
+        "structure_or_scaffold",
+        "host_pathogen_or_defense",
+        "nucleic_acid_binding_or_expression",
+        "unknown_or_insufficient_context"
+      ],
+      "output_table": "protein_jev_classification",
+      "question": "which broad protein class best fits the supplied RefSeq name, product description, and context?"
+    },
+    {
+      "authoritative": false,
+      "deterministic_tiebreaker": "protein_id ASC",
+      "function": "jev_choice",
+      "name": "route",
+      "options": [
+        "sequence_structure_review",
+        "function_annotation_review",
+        "pathway_process_mapping",
+        "interaction_evidence_review",
+        "organism_context_review",
+        "unknown_or_insufficient_context"
+      ],
+      "output_table": "protein_jev_route",
+      "question": "which review queue should receive this protein record based on its supplied metadata and evidence context?"
+    },
+    {
+      "authoritative": false,
+      "deterministic_tiebreaker": "protein_id ASC",
+      "function": "jev_choice",
+      "name": "map",
+      "options": [
+        "enzyme_or_metabolism",
+        "signaling_or_regulation",
+        "transport_or_membrane",
+        "structure_or_scaffold",
+        "host_pathogen_or_defense",
+        "nucleic_acid_binding_or_expression",
+        "unknown_or_insufficient_context"
+      ],
+      "output_table": "protein_jev_map",
+      "question": "which high-level biological map best fits this protein without inferring an unsupported organism trait?"
+    }
+  ],
+  "plan_id": "plan:refseq237-jev-7da34fb470b85e7bba6da13f",
+  "required_preconditions": [
+    "Release 237 staged and checksum-verified",
+    "observed protein row count equals 495,290,394 before a full-release run",
+    "PostgreSQL 14-17 with plpython3u and Jev installed",
+    "operator has approved sending the selected metadata to the Jev provider",
+    "run uses a non-secret query and an explicit spend/row cap"
+  ],
+  "safety_and_scope": [
+    "Jev output is a derived semantic signal, not a canonical biological assertion",
+    "Genomic coordinates and organism mappings remain deterministic source joins",
+    "Do not infer a protein-to-organism trait causal claim from a Jev label",
+    "Persist raw evaluation, model version, query, release, and retrieval time"
+  ],
+  "semantic_query": "relevance to a specified molecular function or protein-of-interest workflow",
+  "source": {
+    "announcement_uri": "https://www.ncbi.nlm.nih.gov/refseq/",
+    "data_as_of": "2026-08-31",
+    "expected_organisms": 184752,
+    "expected_protein_records": 495290394,
+    "expected_transcript_records": 86067871,
+    "release_date": "2026-09-04",
+    "release_number": 237,
+    "source_name": "NCBI RefSeq",
+    "source_uri": "https://ftp.ncbi.nlm.nih.gov/refseq/release/"
+  },
+  "source_table": "refseq237.protein_catalog",
+  "status": "planned_not_executed",
+  "third_party_transfer": {
+    "api_key_source": "TYPESAFE_API_KEY or session setting; never stored in this plan",
+    "approval_required": true,
+    "data_minimization": "Jev view excludes raw protein sequence and sends metadata needed by the question",
+    "required": true
+  }
+}
