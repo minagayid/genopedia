@@ -2,6 +2,10 @@
 
 Genopedia is an offline-first toolkit for inspecting DNA/RNA sequences and producing reproducible local reports. It is designed to run after download on a normal Python installation without TensorFlow, PyTorch, a database, or an internet connection.
 
+The repository also contains a provenance-first protein/genomics data contract. It is a normalized JSONL format with a machine-readable schema, deterministic catalog sorting, sequence SHA-256 deduplication, translation provenance fields, evidence separation, and an optional Jev semantic-ranking adapter. The contract is research-only: it is not for clinical use, synthesis, wet-lab execution, or organism engineering.
+
+The companion [Genopedia Protein Data Format workbook](docs/Genopedia_Protein_Data_Format.xlsx) is the human-facing planning view. It includes the requested protein-first columns plus entity/field dictionaries, relationship guardrails, controlled terms, source registry, deterministic indexing/Jev guidance, examples, and validation rules.
+
 The current release provides:
 
 - Streaming FASTA, FASTQ, VCF, VCF.GZ, and raw-sequence readers.
@@ -44,6 +48,13 @@ Inspect the reference registry without downloading data:
 python -m genopedia reference validate
 python -m genopedia reference search --molecule RNA --role rna_family --json
 python -m genopedia reference plan --purpose correction --molecule DNA --json
+```
+
+Export and validate the protein data contract:
+
+```powershell
+python -m genopedia schema export --output schema/genopedia_protein_data.schema.json
+python -m genopedia schema validate examples/protein_catalog.jsonl
 ```
 
 See [REFERENCE_ENGINE_PLAN.md](REFERENCE_ENGINE_PLAN.md) for the source
@@ -103,6 +114,8 @@ data = read_input("large-sample.fasta", limits=limits)
 genopedia/
 ├── genopedia/       # dependency-free package and CLI
 ├── examples/        # runnable example
+├── docs/             # protein data format, workbook, and optional Jev adapter
+├── schema/           # machine-readable exported data contract
 ├── tests/           # standard-library tests
 ├── pyproject.toml   # install metadata and optional extras
 └── run_genopedia.py # fresh-checkout launcher

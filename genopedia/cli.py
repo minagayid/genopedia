@@ -14,6 +14,8 @@ from .correction import CorrectionPlanner
 from .io import read_input
 from .reporting import render_html_report, write_html_report
 from .references import DEFAULT_MANIFEST, ReferencePlan, ReferenceRegistry
+from .catalog import read_jsonl
+from .schema import schema_json
 
 
 def _synthetic_record(length: int, seed: int) -> SequenceRecord:
@@ -123,6 +125,13 @@ def build_parser() -> argparse.ArgumentParser:
     plan.add_argument("--purpose", choices=["reference", "anomaly_detection", "correction"], default="reference")
     plan.add_argument("--molecule", choices=["DNA", "RNA", "PROTEIN"], default="DNA")
     plan.add_argument("--json", action="store_true", dest="as_json")
+
+    schema = commands.add_parser("schema", help="export or validate the protein data contract")
+    schema_commands = schema.add_subparsers(dest="schema_command", required=True)
+    schema_export = schema_commands.add_parser("export", help="write the machine-readable schema")
+    schema_export.add_argument("--output", type=Path, required=True)
+    schema_validate = schema_commands.add_parser("validate", help="validate a JSONL catalog")
+    schema_validate.add_argument("input", type=Path)
     return parser
 
 
@@ -180,6 +189,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "schema":
+            if args.schema_command == "export":
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(schema_json(), encoding="utf-8")
+                print(f"Schema written to {args.output}")
+                return 0
+            records = read_jsonl(args.input)
+            print(json.dumps({"status": "valid", "records": len(records)}, sort_keys=True))
+            return 0
         if args.command == "reference":
             return _run_reference_command(args)
         if args.command == "demo":

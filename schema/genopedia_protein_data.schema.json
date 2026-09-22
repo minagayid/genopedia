@@ -1,0 +1,1507 @@
+{
+  "$defs": {
+    "assay_observation": {
+      "additionalProperties": false,
+      "description": "Measured or experimentally observed property with context and controls.",
+      "properties": {
+        "assay_type": {
+          "type": "string"
+        },
+        "controls": {},
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "measured_property": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "replicates": {
+          "type": "integer"
+        },
+        "target_entity_id": {
+          "type": "string"
+        },
+        "target_entity_type": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "value_numeric": {
+          "type": "number"
+        },
+        "value_text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "target_entity_type",
+        "target_entity_id",
+        "assay_type",
+        "measured_property",
+        "evidence_record_id"
+      ],
+      "type": "object"
+    },
+    "cds": {
+      "additionalProperties": false,
+      "description": "Coding sequence intervals and completeness metadata.",
+      "properties": {
+        "complete_3p": {
+          "type": "boolean"
+        },
+        "complete_5p": {
+          "type": "boolean"
+        },
+        "end_segment_ordinal": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "phase": {
+          "type": "integer"
+        },
+        "reading_frame": {
+          "type": "integer"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "start_segment_ordinal": {
+          "type": "integer"
+        },
+        "transcript_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "transcript_id",
+        "start_segment_ordinal",
+        "end_segment_ordinal"
+      ],
+      "type": "object"
+    },
+    "claim_assertion": {
+      "additionalProperties": false,
+      "description": "Typed relationship claim that can be supported or contradicted.",
+      "properties": {
+        "assertion_status": {
+          "type": "string"
+        },
+        "causal_strength": {
+          "type": "string"
+        },
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "intermediate_relation_ids": {
+          "items": {},
+          "type": "array"
+        },
+        "object_entity_id": {
+          "type": "string"
+        },
+        "object_entity_type": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "subject_entity_id": {
+          "type": "string"
+        },
+        "subject_entity_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "subject_entity_type",
+        "subject_entity_id",
+        "predicate",
+        "object_entity_type",
+        "object_entity_id",
+        "evidence_record_id",
+        "causal_strength",
+        "assertion_status"
+      ],
+      "type": "object"
+    },
+    "controlled_term": {
+      "additionalProperties": false,
+      "description": "Versioned term from an external vocabulary or ontology.",
+      "properties": {
+        "accession": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "parent_term_id": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "vocabulary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "vocabulary",
+        "accession",
+        "label",
+        "uri"
+      ],
+      "type": "object"
+    },
+    "dataset_release": {
+      "additionalProperties": false,
+      "description": "Immutable source or project release boundary.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "released_at": {
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "string"
+        },
+        "source_name": {
+          "type": "string"
+        },
+        "source_uri": {
+          "type": "string"
+        },
+        "source_version": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "deprecated",
+            "superseded",
+            "withdrawn"
+          ],
+          "type": "string"
+        },
+        "supersedes_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_name",
+        "source_version",
+        "retrieved_at",
+        "source_uri",
+        "status"
+      ],
+      "type": "object"
+    },
+    "derived_index_manifest": {
+      "additionalProperties": false,
+      "description": "Deterministic manifest for a derived sort, filter, or search index.",
+      "properties": {
+        "artifact_uri": {
+          "type": "string"
+        },
+        "build_id": {
+          "type": "string"
+        },
+        "comparator": {
+          "type": "string"
+        },
+        "deterministic": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "index_parameters": {},
+        "index_type": {
+          "type": "string"
+        },
+        "input_release_id": {
+          "type": "string"
+        },
+        "input_sha256": {
+          "type": "string"
+        },
+        "null_order": {
+          "type": "string"
+        },
+        "partition_key": {
+          "type": "string"
+        },
+        "sort_key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "input_release_id",
+        "index_type",
+        "partition_key",
+        "sort_key",
+        "comparator",
+        "null_order",
+        "index_parameters",
+        "build_id",
+        "artifact_uri",
+        "input_sha256",
+        "deterministic"
+      ],
+      "type": "object"
+    },
+    "design_record": {
+      "additionalProperties": false,
+      "description": "In-silico reconstruction or design hypothesis with explicit limits.",
+      "properties": {
+        "constraints": {},
+        "design_type": {
+          "enum": [
+            "reconstructed",
+            "predicted",
+            "designed"
+          ],
+          "type": "string"
+        },
+        "exclusions": {},
+        "id": {
+          "type": "string"
+        },
+        "input_release_id": {
+          "type": "string"
+        },
+        "model_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "objective": {
+          "type": "string"
+        },
+        "output_sequence_id": {
+          "type": "string"
+        },
+        "parent_entity_ids": {
+          "items": {},
+          "type": "array"
+        },
+        "provenance_activity_id": {
+          "type": "string"
+        },
+        "random_seed": {
+          "type": "integer"
+        },
+        "review_status": {
+          "type": "string"
+        },
+        "safety_status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "design_type",
+        "parent_entity_ids",
+        "objective",
+        "constraints",
+        "exclusions",
+        "model_name",
+        "model_version",
+        "input_release_id",
+        "output_sequence_id",
+        "review_status",
+        "safety_status",
+        "provenance_activity_id"
+      ],
+      "type": "object"
+    },
+    "domain_motif_annotation": {
+      "additionalProperties": false,
+      "description": "Residue-level domain, motif, or site annotation.",
+      "properties": {
+        "annotation_type": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "end": {
+          "type": "integer"
+        },
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "protein_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "start": {
+          "type": "integer"
+        },
+        "term_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "protein_id",
+        "annotation_type",
+        "term_id",
+        "start",
+        "end",
+        "evidence_record_id",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "entity_relation": {
+      "additionalProperties": false,
+      "description": "Normalized typed edge between versioned entities, separate from the entities it connects.",
+      "properties": {
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "object_entity_id": {
+          "type": "string"
+        },
+        "object_entity_type": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "provenance_activity_id": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "subject_entity_id": {
+          "type": "string"
+        },
+        "subject_entity_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "subject_entity_type",
+        "subject_entity_id",
+        "predicate",
+        "object_entity_type",
+        "object_entity_id",
+        "release_id",
+        "provenance_activity_id"
+      ],
+      "type": "object"
+    },
+    "evidence_record": {
+      "additionalProperties": false,
+      "description": "Evidence and source record for a claim, observation, or annotation.",
+      "properties": {
+        "assay_observation_id": {
+          "type": "string"
+        },
+        "contradicts_claim_id": {
+          "type": "string"
+        },
+        "evidence_type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "publication_id": {
+          "type": "string"
+        },
+        "quality_level": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "supports_claim_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "evidence_type",
+        "source_record_id",
+        "quality_level"
+      ],
+      "type": "object"
+    },
+    "gene_locus": {
+      "additionalProperties": false,
+      "description": "A gene locus anchored to an explicit assembly and replicon.",
+      "properties": {
+        "end": {
+          "type": "integer"
+        },
+        "external_id": {
+          "type": "string"
+        },
+        "feature_type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "replicon_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "start": {
+          "type": "integer"
+        },
+        "strand": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "replicon_id",
+        "start",
+        "end",
+        "strand",
+        "feature_type",
+        "release_id",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "genome_assembly": {
+      "additionalProperties": false,
+      "description": "Coordinate system and assembly release for genomic features.",
+      "properties": {
+        "assembly_accession": {
+          "type": "string"
+        },
+        "assembly_version": {
+          "type": "string"
+        },
+        "coordinate_system": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "organism_context_id",
+        "assembly_accession",
+        "coordinate_system",
+        "release_id",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "interaction_assertion": {
+      "additionalProperties": false,
+      "description": "Evidence-backed interaction or complex-participation assertion.",
+      "properties": {
+        "confidence": {
+          "type": "number"
+        },
+        "directionality": {
+          "type": "string"
+        },
+        "directness": {
+          "type": "string"
+        },
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "interaction_type": {
+          "type": "string"
+        },
+        "negative_assertion": {
+          "type": "boolean"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "participant_a_id": {
+          "type": "string"
+        },
+        "participant_b_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "participant_a_id",
+        "participant_b_id",
+        "interaction_type",
+        "directness",
+        "evidence_record_id"
+      ],
+      "type": "object"
+    },
+    "model_prediction": {
+      "additionalProperties": false,
+      "description": "Model output kept distinct from observation and curation.",
+      "properties": {
+        "calibration_status": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "input_release_id": {
+          "type": "string"
+        },
+        "model_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "output": {},
+        "provenance_activity_id": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number"
+        },
+        "target_entity_id": {
+          "type": "string"
+        },
+        "target_entity_type": {
+          "type": "string"
+        },
+        "task": {
+          "type": "string"
+        },
+        "uncertainty": {}
+      },
+      "required": [
+        "id",
+        "target_entity_type",
+        "target_entity_id",
+        "model_name",
+        "model_version",
+        "task",
+        "input_release_id",
+        "output",
+        "calibration_status",
+        "provenance_activity_id"
+      ],
+      "type": "object"
+    },
+    "organism_context": {
+      "additionalProperties": false,
+      "description": "Organism, strain, sample, developmental, tissue, and cell context.",
+      "properties": {
+        "cell_type_term_id": {
+          "type": "string"
+        },
+        "developmental_stage_term_id": {
+          "type": "string"
+        },
+        "environment": {},
+        "id": {
+          "type": "string"
+        },
+        "strain_or_sample": {
+          "type": "string"
+        },
+        "taxon_id": {
+          "type": "string"
+        },
+        "tissue_term_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "taxon_id"
+      ],
+      "type": "object"
+    },
+    "pathway_process": {
+      "additionalProperties": false,
+      "description": "Pathway or biological-process term from a versioned source.",
+      "properties": {
+        "accession": {
+          "type": "string"
+        },
+        "database": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "term_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "term_id",
+        "database",
+        "accession",
+        "label",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "phenotype_trait": {
+      "additionalProperties": false,
+      "description": "Phenotype or capability record with explicit biological scale.",
+      "properties": {
+        "biological_scale": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "term_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "biological_scale",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "protein": {
+      "additionalProperties": false,
+      "description": "Protein product identity without embedding source-specific claims.",
+      "properties": {
+        "design_record_id": {
+          "type": "string"
+        },
+        "gene_locus_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "isoform_label": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "preferred_name": {
+          "type": "string"
+        },
+        "record_type": {
+          "enum": [
+            "observed",
+            "reconstructed",
+            "predicted",
+            "designed"
+          ],
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "synonyms": {
+          "items": {},
+          "type": "array"
+        },
+        "transcript_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "preferred_name",
+        "sequence_record_id",
+        "organism_context_id",
+        "record_type",
+        "release_id",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "provenance_activity": {
+      "additionalProperties": false,
+      "description": "A reproducible ingestion, transformation, prediction, or indexing step.",
+      "properties": {
+        "activity_type": {
+          "type": "string"
+        },
+        "container_digest": {
+          "type": "string"
+        },
+        "ended_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "input_record_ids": {
+          "items": {},
+          "type": "array"
+        },
+        "output_record_ids": {
+          "items": {},
+          "type": "array"
+        },
+        "parameters": {},
+        "random_seed": {
+          "type": "integer"
+        },
+        "software_name": {
+          "type": "string"
+        },
+        "software_version": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "activity_type",
+        "software_name",
+        "software_version"
+      ],
+      "type": "object"
+    },
+    "replicon": {
+      "additionalProperties": false,
+      "description": "Chromosome, plasmid, organelle, or other assembly replicon.",
+      "properties": {
+        "assembly_id": {
+          "type": "string"
+        },
+        "circular": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "replicon_type": {
+          "type": "string"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "assembly_id",
+        "name",
+        "replicon_type",
+        "length"
+      ],
+      "type": "object"
+    },
+    "safety_uncertainty_review": {
+      "additionalProperties": false,
+      "description": "Research-only review of unknowns, hazards, and scope status.",
+      "properties": {
+        "flags": {
+          "items": {},
+          "type": "array"
+        },
+        "hazards": {
+          "items": {},
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "known_unknowns": {
+          "items": {},
+          "type": "array"
+        },
+        "review_scope": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "target_entity_id": {
+          "type": "string"
+        },
+        "target_entity_type": {
+          "type": "string"
+        },
+        "uncertainty_summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "target_entity_type",
+        "target_entity_id",
+        "review_scope",
+        "uncertainty_summary",
+        "known_unknowns",
+        "hazards",
+        "status"
+      ],
+      "type": "object"
+    },
+    "sequence_record": {
+      "additionalProperties": false,
+      "description": "Deduplicated sequence bytes plus typed biological usage metadata.",
+      "properties": {
+        "alphabet": {
+          "type": "string"
+        },
+        "content_uri": {
+          "type": "string"
+        },
+        "digest_algorithm": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "normalization_version": {
+          "type": "string"
+        },
+        "record_type": {
+          "enum": [
+            "observed",
+            "reconstructed",
+            "predicted",
+            "designed"
+          ],
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "sequence_sha256": {
+          "type": "string"
+        },
+        "sequence_type": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "sequence_type",
+        "alphabet",
+        "length",
+        "digest_algorithm",
+        "sequence_sha256",
+        "normalization_version",
+        "content_uri",
+        "record_type",
+        "release_id"
+      ],
+      "type": "object"
+    },
+    "sequence_usage": {
+      "additionalProperties": false,
+      "description": "Typed link from sequence bytes to the biological object using them.",
+      "properties": {
+        "coordinate_end": {
+          "type": "integer"
+        },
+        "coordinate_start": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "owner_entity_id": {
+          "type": "string"
+        },
+        "owner_entity_type": {
+          "type": "string"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "usage_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "sequence_record_id",
+        "owner_entity_type",
+        "owner_entity_id",
+        "usage_type"
+      ],
+      "type": "object"
+    },
+    "source_record": {
+      "additionalProperties": false,
+      "description": "Source-scoped identifier and retrieval metadata.",
+      "properties": {
+        "checksum_sha256": {
+          "type": "string"
+        },
+        "external_id": {
+          "type": "string"
+        },
+        "external_version": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "record_type": {
+          "type": "string"
+        },
+        "record_uri": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "source_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_name",
+        "external_id",
+        "record_uri",
+        "record_type",
+        "release_id"
+      ],
+      "type": "object"
+    },
+    "structure_chain": {
+      "additionalProperties": false,
+      "description": "Chain-level mapping between a structure model and a sequence.",
+      "properties": {
+        "chain_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "mapping_status": {
+          "type": "string"
+        },
+        "residue_end": {
+          "type": "integer"
+        },
+        "residue_start": {
+          "type": "integer"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "structure_model_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "structure_model_id",
+        "chain_id",
+        "sequence_record_id",
+        "mapping_status"
+      ],
+      "type": "object"
+    },
+    "structure_model": {
+      "additionalProperties": false,
+      "description": "Experimental or predicted structure with coverage and uncertainty metadata.",
+      "properties": {
+        "confidence_artifact_uri": {
+          "type": "string"
+        },
+        "coordinates_uri": {
+          "type": "string"
+        },
+        "coverage_fraction": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "model_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "pae_artifact_uri": {
+          "type": "string"
+        },
+        "provenance_activity_id": {
+          "type": "string"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "structure_accession": {
+          "type": "string"
+        },
+        "structure_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "structure_type",
+        "sequence_record_id",
+        "method",
+        "coordinates_uri",
+        "provenance_activity_id"
+      ],
+      "type": "object"
+    },
+    "taxon": {
+      "additionalProperties": false,
+      "description": "Taxonomic identity used for cross-species comparison.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ncbi_taxon_id": {
+          "type": "string"
+        },
+        "rank": {
+          "type": "string"
+        },
+        "scientific_name": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "scientific_name",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "transcript": {
+      "additionalProperties": false,
+      "description": "RNA transcript or isoform connected to a gene locus.",
+      "properties": {
+        "external_id": {
+          "type": "string"
+        },
+        "gene_locus_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "is_reference": {
+          "type": "boolean"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "rna_type": {
+          "type": "string"
+        },
+        "sequence_record_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "gene_locus_id",
+        "rna_type",
+        "release_id",
+        "source_record_id"
+      ],
+      "type": "object"
+    },
+    "transcript_segment": {
+      "additionalProperties": false,
+      "description": "Exon, UTR, or other reproducible transcript interval.",
+      "properties": {
+        "end": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ordinal": {
+          "type": "integer"
+        },
+        "replicon_id": {
+          "type": "string"
+        },
+        "segment_type": {
+          "type": "string"
+        },
+        "start": {
+          "type": "integer"
+        },
+        "strand": {
+          "type": "string"
+        },
+        "transcript_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "transcript_id",
+        "ordinal",
+        "segment_type",
+        "replicon_id",
+        "start",
+        "end",
+        "strand"
+      ],
+      "type": "object"
+    },
+    "translation_context": {
+      "additionalProperties": false,
+      "description": "Ribosomal translation context for a deterministic CDS-to-protein derivation.",
+      "properties": {
+        "frame": {
+          "type": "integer"
+        },
+        "genetic_code_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "orientation": {
+          "type": "string"
+        },
+        "recoding_rules": {},
+        "start_policy": {
+          "type": "string"
+        },
+        "stop_policy": {
+          "type": "string"
+        },
+        "strand": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "genetic_code_id",
+        "strand",
+        "orientation",
+        "frame",
+        "start_policy",
+        "stop_policy"
+      ],
+      "type": "object"
+    },
+    "translation_event": {
+      "additionalProperties": false,
+      "description": "Auditable CDS-to-protein transformation.",
+      "properties": {
+        "cds_id": {
+          "type": "string"
+        },
+        "deterministic": {
+          "type": "boolean"
+        },
+        "exact": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "input_sequence_id": {
+          "type": "string"
+        },
+        "output_sequence_id": {
+          "type": "string"
+        },
+        "protein_id": {
+          "type": "string"
+        },
+        "provenance_activity_id": {
+          "type": "string"
+        },
+        "translation_context_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "cds_id",
+        "translation_context_id",
+        "protein_id",
+        "input_sequence_id",
+        "output_sequence_id",
+        "provenance_activity_id",
+        "deterministic",
+        "exact"
+      ],
+      "type": "object"
+    },
+    "variant_assertion": {
+      "additionalProperties": false,
+      "description": "Release- and context-scoped sequence variant with evidence and effect metadata.",
+      "properties": {
+        "alternate": {
+          "type": "string"
+        },
+        "effect_term_id": {
+          "type": "string"
+        },
+        "evidence_record_id": {
+          "type": "string"
+        },
+        "gene_locus_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "organism_context_id": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "replicon_id": {
+          "type": "string"
+        },
+        "source_record_id": {
+          "type": "string"
+        },
+        "variant_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "position",
+        "reference",
+        "alternate",
+        "variant_type",
+        "evidence_record_id",
+        "source_record_id",
+        "release_id"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/minagayid/genopedia/schema/genopedia-protein-data-1.0.0.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Research-only normalized data contract. NOT_FOR_CLINICAL_USE; NOT_FOR_SYNTHESIS_OR_WET_LAB_USE.",
+  "properties": {
+    "data": {
+      "type": "object"
+    },
+    "entity_type": {
+      "enum": [
+        "dataset_release",
+        "source_record",
+        "provenance_activity",
+        "controlled_term",
+        "taxon",
+        "organism_context",
+        "genome_assembly",
+        "replicon",
+        "gene_locus",
+        "transcript",
+        "transcript_segment",
+        "cds",
+        "translation_context",
+        "translation_event",
+        "variant_assertion",
+        "protein",
+        "sequence_record",
+        "sequence_usage",
+        "structure_model",
+        "structure_chain",
+        "domain_motif_annotation",
+        "interaction_assertion",
+        "pathway_process",
+        "phenotype_trait",
+        "assay_observation",
+        "evidence_record",
+        "model_prediction",
+        "design_record",
+        "claim_assertion",
+        "entity_relation",
+        "safety_uncertainty_review",
+        "derived_index_manifest"
+      ],
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "type": "string"
+    }
+  },
+  "required": [
+    "entity_type",
+    "schema_version",
+    "data"
+  ],
+  "title": "Genopedia provenance-first protein data format",
+  "type": "object",
+  "x-controlled-vocabularies": {
+    "biological_scale": [
+      "molecule",
+      "complex",
+      "cell",
+      "tissue",
+      "organ",
+      "organism",
+      "population"
+    ],
+    "design_safety_status": [
+      "not_assessed",
+      "research_only",
+      "review_required",
+      "not_for_synthesis",
+      "blocked"
+    ],
+    "evidence_type": [
+      "experimental",
+      "curated",
+      "computational",
+      "comparative",
+      "text_mined",
+      "negative"
+    ],
+    "record_type": [
+      "observed",
+      "reconstructed",
+      "predicted",
+      "designed"
+    ],
+    "status": [
+      "active",
+      "deprecated",
+      "superseded",
+      "withdrawn"
+    ]
+  }
+}

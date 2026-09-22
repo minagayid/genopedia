@@ -11,6 +11,20 @@ from .core import (
 )
 from .references import ReferencePlan, ReferenceRegistry, ReferenceSource
 from .io import DEFAULT_INPUT_LIMITS, InputLimitError, InputLimits
+from .catalog import build_index_manifest, build_jev_sort_spec, read_jsonl, sort_envelopes, write_jsonl
+from .schema import (
+    ENTITY_SPECS,
+    NOT_FOR_CLINICAL_USE,
+    NOT_FOR_SYNTHESIS_OR_WET_LAB_USE,
+    SCHEMA_VERSION,
+    SchemaValidationError,
+    make_envelope,
+    make_sequence_record,
+    schema_document,
+    sequence_sha256,
+    validate_envelope,
+    validate_record,
+)
 
 __all__ = [
     "FunctionalRegion",
@@ -28,7 +42,23 @@ __all__ = [
     "ReferenceRegistry",
     "ReferenceSource",
     "Variant",
+    "ENTITY_SPECS",
+    "NOT_FOR_CLINICAL_USE",
+    "NOT_FOR_SYNTHESIS_OR_WET_LAB_USE",
+    "SCHEMA_VERSION",
+    "SchemaValidationError",
+    "build_index_manifest",
+    "build_jev_sort_spec",
+    "make_envelope",
+    "make_sequence_record",
+    "read_jsonl",
+    "schema_document",
+    "sequence_sha256",
+    "sort_envelopes",
+    "validate_envelope",
+    "validate_record",
+    "write_jsonl",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
