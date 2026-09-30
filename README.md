@@ -134,3 +134,7 @@ genopedia/
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Agent evaluation roadmap
+
+See [evaluation contracts and evidence gates](docs/evaluation-roadmap.md) and [Agent Eval Lab](https://github.com/minagayid/agent-eval-lab).
