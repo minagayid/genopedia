@@ -101,6 +101,12 @@ python -m pip install -e .[ml]   # NumPy/scikit-learn extensions
 python -m pip install -e .[dev]  # pytest, formatting, and lint tools
 ```
 
+## Release and deployment
+
+Genopedia is a local Python package and CLI, not a hosted web service. CI checks the supported Python versions, builds source and wheel distributions, validates their metadata, installs the wheel into a clean virtual environment, and smoke-tests the installed CLI outside the source checkout.
+
+For PyPI release setup, the release approval gate, and the versioned release checklist, see [docs/release-process.md](docs/release-process.md). Publishing requires a configured PyPI Trusted Publisher and approval in the GitHub `pypi` environment; no long-lived PyPI API token is stored in the repository.
+
 ## Coordinate and safety conventions
 
 Sequence comparisons use zero-based positions. VCF positions remain one-based and are marked as such in variant metadata. Variant interpretations are `unknown` unless supplied evidence matches a supported evidence label. Candidate promoters and start codons are heuristics, not gene annotation.
