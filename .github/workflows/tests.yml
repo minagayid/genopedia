@@ -1,22 +1,54 @@
-name: tests
+name: CI
 
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  unit:
+  tests:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run standard-library tests
+      - name: Run unit tests
         run: python -m unittest discover -s tests -v
       - name: Check compilation
         run: python -m compileall -q genopedia examples tests
 
+  package:
+    name: Build, inspect, and smoke-test distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Build source and wheel distributions
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build --sdist --wheel
+          python -m twine check --strict dist/*
+      - name: Install wheel into a clean virtual environment
+        run: |
+          python -m venv "$RUNNER_TEMP/genopedia-venv"
+          "$RUNNER_TEMP/genopedia-venv/bin/python" -m pip install --no-deps dist/*.whl
+      - name: Smoke-test installed CLI outside the checkout
+        working-directory: ${{ runner.temp }}
+        run: |
+          "$RUNNER_TEMP/genopedia-venv/bin/genopedia" demo --length 12 --output smoke-report.html --json-output smoke-report.json
+          "$RUNNER_TEMP/genopedia-venv/bin/genopedia" reference validate
+          test -s smoke-report.html
+          test -s smoke-report.json

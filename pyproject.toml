@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "genopedia"
-version = "0.2.0"
 description = "Offline-first DNA/RNA sequence inspection and reporting toolkit"
 readme = "README.md"
+dynamic = ["version"]
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [{ name = "Genopedia Project" }]
@@ -25,6 +25,9 @@ include = ["genopedia*"]
 
 [tool.setuptools.package-data]
 genopedia = ["reference-manifest.json"]
+
+[tool.setuptools.dynamic]
+version = { attr = "genopedia.__version__" }
 
 [tool.black]
 line-length = 100
