@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from app.api.auth import router as auth_router
@@ -12,6 +13,8 @@ from app.db.session import get_db
 
 settings = get_settings()
 app = FastAPI(title="Genopedia API", version="0.3.0", description="Local-first genomics reporting with account services.", redoc_url=None)
+STATIC_DIR = Path(__file__).parent / "static"
+app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
 if settings.cors_origins:
     app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_credentials=True, allow_methods=["GET", "POST", "PATCH", "OPTIONS"], allow_headers=["Content-Type", "X-CSRF-Token"])
 
@@ -21,7 +24,7 @@ async def security_headers(request, call_next):
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("X-Frame-Options", "DENY")
     response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-    response.headers.setdefault("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';")
+    response.headers.setdefault("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';")
     if settings.app_env.lower() == "production" and settings.secure_cookies:
         response.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
     return response
