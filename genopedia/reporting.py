@@ -169,6 +169,8 @@ def render_html_report(
     quality_reports = list(quality_reports)
     sequence_anomalies = list(sequence_anomalies)
     correction_suggestions = list(correction_suggestions)
+    molecule = str(reference_plan.molecule).upper() if reference_plan else "DNA"
+    is_protein = molecule == "PROTEIN"
 
     normalized_sequences = [
         "".join(str(record.sequence).split()).upper()
@@ -212,7 +214,8 @@ def render_html_report(
         '<span class="legend-item">'
         f'<span class="swatch" style="--swatch-color:{color}" aria-hidden="true"></span>'
         f'<span class="legend-symbol">{html.escape(base)}</span>'
-        f'<span class="legend-name">{html.escape(name)}</span></span>'
+        + (f'<span class="legend-name">{html.escape(name)}</span>' if not is_protein else "")
+        + '</span>'
         for base, (color, name) in BASE_COLORS.items()
     )
 
@@ -220,6 +223,12 @@ def render_html_report(
     for index, record in enumerate(records):
         sequence = normalized_sequences[index]
         sequence_length = len(sequence)
+        metric_label = "Unique symbols" if is_protein else "GC fraction"
+        metric_value = (
+            f"{len(set(sequence)):,}"
+            if is_protein
+            else f"{(sequence.count('G') + sequence.count('C')) / sequence_length * 100 if sequence_length else 0:.1f}%"
+        )
         description = html.escape(record.description or "No description supplied.")
         sequence_sections.append(
             f'<article class="sequence-card" data-search-card>'
@@ -231,13 +240,13 @@ def render_html_report(
             '<span class="tag tag-neutral">Local sequence</span></div>'
             '<div class="sequence-metrics">'
             f'<span><strong>{sequence_length:,}</strong> symbols</span>'
-            f'<span><strong>{(sequence.count("G") + sequence.count("C")) / sequence_length * 100 if sequence_length else 0:.1f}%</strong> GC fraction</span>'
+            f'<span><strong>{metric_value}</strong> {metric_label}</span>'
             '</div>'
             f'<div class="sequence" aria-label="Color-coded sequence for {html.escape(record.identifier)}">'
             f'{_render_sequence_spans(sequence)}</div>'
             f'<div class="svg-wrap">{render_svg_sequence(sequence)}</div>'
             '<div class="sequence-card-footer">'
-            '<span class="sequence-footnote">Color key follows the nucleotide palette; unrecognized symbols stay neutral.</span>'
+            '<span class="sequence-footnote">Color key distinguishes common sequence symbols; unrecognized symbols stay neutral.</span>'
             f'<button class="text-button" type="button" data-copy-target="sequence-raw-{index}" aria-label="Copy sequence {html.escape(record.identifier)}">'
             '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg> Copy sequence</button>'
             f'<code class="sr-only" id="sequence-raw-{index}">{html.escape(sequence)}</code>'
@@ -664,7 +673,7 @@ td:first-child { font-weight: 650; }
     <section class="panel section-panel" id="sequences" aria-labelledby="sequences-title">
       <div class="panel-header"><div><div class="section-kicker">INPUTS</div><h2 id="sequences-title">Sequence explorer</h2><p class="panel-description">Inspect record metadata, scan color-coded symbols, and copy a normalized sequence for local work.</p></div><span class="tag tag-accent">__RECORD_COUNT__ records</span></div>
       <div class="sequence-grid">__SEQUENCE_CARDS__</div>
-      <div class="legend" aria-label="Nucleotide color key">__LEGEND__</div>
+      <div class="legend" aria-label="Sequence symbol color key">__LEGEND__</div>
     </section>
     <section class="panel section-panel" id="quality" aria-labelledby="quality-title">
       <div class="panel-header"><div><div class="section-kicker">QUALITY &amp; INTEGRITY</div><h2 id="quality-title">Quality control</h2><p class="panel-description">A record-level view of sequence length, GC fraction, ambiguous symbols, and parser or quality warnings.</p></div><span class="tag tag-neutral">__QUALITY_COUNT__ records</span></div>
