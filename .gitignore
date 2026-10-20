@@ -112,3 +112,9 @@ data/
 # Dotenv
 .env.local
 .env.*.local
+
+# Genopedia API local secrets and state
+.env
+.env.*
+!.env.example
+genopedia.db

@@ -78,6 +78,12 @@ The convenience launcher also works directly from the repository root:
 python run_genopedia.py demo
 ```
 
+## API server, authentication, and cloud deployment
+
+The optional FastAPI service provides email/password accounts, revocable server-side sessions, a profile API, login/sign-up pages, health probes, and Docker deployment with PostgreSQL. It is separate from the offline CLI and its core dependencies. See [docs/backend-deployment.md](docs/backend-deployment.md) for setup, security boundaries, environment configuration, and the production launch checklist.
+
+Install the API extra with `python -m pip install -e ".[api,dev]"`, apply migrations with `alembic upgrade head`, and start the server with `uvicorn app.main:app --reload`.
+
 ## Development
 
 Run the built-in test suite without installing pytest:
