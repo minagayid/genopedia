@@ -1,0 +1,100 @@
+{
+  "register_version": "0.1.0",
+  "reviewed_on": "2026-11-21",
+  "purpose": "Literature leads for a comparative regeneration pilot, not an acquired training dataset",
+  "status": "literature_review_only",
+  "clinical_use": false,
+  "raw_assets_downloaded": false,
+  "sample_metadata_audited": false,
+  "notes": [
+    "Study-level metadata below was extracted from inspected papers. Asset checksums, provider terms, and full sample manifests remain to be audited before ingestion.",
+    "Null fields mean not audited or not resolved here, not that an accession or biological property does not exist.",
+    "This planning register is not a canonical Genopedia JSONL catalog and is not validated by the protein schema CLI. See regeneration-benchmark.md for the acquisition requirements."
+  ],
+  "studies": [
+    {
+      "study_id": "leigh_2018_axolotl_limb",
+      "source_url": "https://www.nature.com/articles/s41467-018-07604-0",
+      "source_type": "primary_research",
+      "organism": "Ambystoma mexicanum",
+      "common_name": "axolotl salamander",
+      "anatomical_context": "adult forelimb, homeostasis and early regeneration",
+      "assay": "single-cell RNA-seq",
+      "reported_biological_units": "13 adult animals across sampled conditions",
+      "accession": null,
+      "suggested_role": "candidate within-species pilot, pending sample audit",
+      "limitations": [
+        "Individual cells are nested within animals; split and uncertainty must respect this.",
+        "Expression-derived trajectories are not alone lineage proof or human therapeutic evidence."
+      ],
+      "acquisition_status": "not_started",
+      "license_audit": null,
+      "asset_sha256": null
+    },
+    {
+      "study_id": "vonk_2023_anole_tail",
+      "source_url": "https://www.nature.com/articles/s41467-023-40206-z",
+      "source_type": "primary_research",
+      "organism": "Anolis carolinensis",
+      "common_name": "green anole lizard",
+      "anatomical_context": "tail regeneration; fibroblast and phagocyte programs",
+      "assay": "single-cell RNA-seq with additional model-specific functional evidence",
+      "reported_biological_units": null,
+      "accession": null,
+      "suggested_role": "comparative cartilage and injury-context study after metadata audit",
+      "limitations": [
+        "Tail regrowth is not natural limb regeneration.",
+        "Replacement tail anatomy differs from original tail anatomy.",
+        "Evidence in lizard context does not establish human benefit."
+      ],
+      "acquisition_status": "not_started",
+      "license_audit": null,
+      "asset_sha256": null
+    },
+    {
+      "study_id": "jo_2025_sea_star_nerve_cord",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12236018/",
+      "source_type": "primary_data_report",
+      "organism": "Asterias amurensis",
+      "common_name": "sea star",
+      "taxonomic_class": "Asteroidea",
+      "anatomical_context": "nerve cord, control versus 72 hours after arm loss",
+      "assay": "bulk RNA-seq and de novo transcriptome assembly",
+      "reported_biological_units": "three animals per group, pooled material; two reported sequencing libraries",
+      "accession": "PRJNA1139949",
+      "reported_run_accessions": ["SRR29975745", "SRR29975744"],
+      "reported_assembly_accession": "GLFZ00000000",
+      "accession_verification": "reported in inspected paper; provider asset metadata not independently audited",
+      "suggested_role": "exploratory annotation and comparative retrieval, not a replicated classifier benchmark",
+      "limitations": [
+        "Do not count pooled animals as independent RNA-seq libraries.",
+        "Only nerve-cord and one post-injury time point are represented.",
+        "Assembly and functional annotations need version and quality audits."
+      ],
+      "acquisition_status": "not_started",
+      "license_audit": null,
+      "asset_sha256": null
+    },
+    {
+      "study_id": "parey_2024_brittle_star_arm",
+      "source_url": "https://www.nature.com/articles/s41559-024-02456-y",
+      "source_type": "primary_research",
+      "organism": "Amphiura filiformis",
+      "common_name": "brittle star",
+      "taxonomic_class": "Ophiuroidea",
+      "anatomical_context": "adult arm regeneration time course",
+      "assay": "genome assembly and bulk transcriptomic time course",
+      "reported_biological_units": null,
+      "accession": null,
+      "suggested_role": "additional echinoderm comparative time-course lead",
+      "limitations": [
+        "Brittle stars are not sea stars; keep taxonomy explicit.",
+        "Sample pooling, replication, stage matching, and orthology require audit.",
+        "Conserved expression dynamics do not prove transferable human regenerative capacity."
+      ],
+      "acquisition_status": "not_started",
+      "license_audit": null,
+      "asset_sha256": null
+    }
+  ]
+}
