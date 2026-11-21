@@ -102,3 +102,6 @@ async def oauth_callback(provider:str,request:Request,db:Session=Depends(get_db)
  elif not user.email_verified:user.email_verified=True;db.commit()
  if user is None or not user.is_active:raise HTTPException(403,"Account is disabled")
  access,refresh=issue(db,user,request);audit(db,user.id,"auth.oauth."+provider);redirect=RedirectResponse(f"{FRONTEND_URL}/auth/callback#access_token={access}",status_code=302);set_cookie(redirect,refresh);return redirect
+from .analyses import router as analyses_router
+from .ai import router as ai_router
+app.include_router(analyses_router);app.include_router(ai_router)

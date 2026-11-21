@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: 'Inter var', 'Inter', system-ui, -apple-system, sans-serif;
+    @apply bg-slate-950 text-slate-100;
+  }
+  :focus-visible {
+    outline: 2px solid theme('colors.brand.500');
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: rgb(16 185 129 / 0.35);
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-brand-gradient bg-clip-text text-transparent;
+  }
+  .glass-card {
+    @apply rounded-2xl border border-slate-800 bg-slate-900/60 shadow-card backdrop-blur;
+  }
+  .seq-base {
+    @apply inline-block w-[1.1ch] text-center font-mono;
+  }
+}

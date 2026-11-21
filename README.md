@@ -96,6 +96,10 @@ The convenience launcher also works directly from the repository root:
 python run_genopedia.py demo
 ```
 
+## Web app
+
+A Vite + React web workspace lives in `frontend/` (accounts, analyses, comparison, AI-assistant boundary). See [API deployment](docs/api-deployment.md#web-workspace-frontend).
+
 ## Development
 
 Run the full built-in test suite, including the optional API tests (pytest is not required):
