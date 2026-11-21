@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm install --include=dev && npm run build",
+  "buildCommand": "cd frontend && npm ci --include=dev && npm run build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/auth/:path*", "destination": "/api/index.py" },
