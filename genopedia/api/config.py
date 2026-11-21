@@ -1,5 +1,17 @@
 import os
 APP_ENV=os.getenv("APP_ENV","development").lower(); DATABASE_URL=os.getenv("DATABASE_URL","sqlite:///./genopedia.db")
+
+
+def _normalize_database_url(url: str) -> str:
+    """Map generic postgres URLs onto the psycopg3 driver SQLAlchemy must use here."""
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://"):]
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        return "postgresql+psycopg://" + url[len("postgresql://"):]
+    return url
+
+
+DATABASE_URL = _normalize_database_url(DATABASE_URL)
 JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY","dev-only-change-this-secret-before-deploying-32chars"); SESSION_SECRET_KEY=os.getenv("SESSION_SECRET_KEY",JWT_SECRET_KEY)
 ACCESS_TOKEN_MINUTES=int(os.getenv("ACCESS_TOKEN_MINUTES","15")); REFRESH_TOKEN_DAYS=int(os.getenv("REFRESH_TOKEN_DAYS","30"))
 FRONTEND_URL=os.getenv("FRONTEND_URL","http://localhost:3000").rstrip("/"); API_PUBLIC_URL=os.getenv("API_PUBLIC_URL","http://localhost:8000").rstrip("/")
