@@ -112,3 +112,5 @@ data/
 # Dotenv
 .env.local
 .env.*.local
+!frontend/src/lib/
+!frontend/src/lib/**
