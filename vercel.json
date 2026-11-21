@@ -2,9 +2,25 @@
   "buildCommand": "cd frontend && npm ci --include=dev && npm run build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
-    { "source": "/auth/:path*", "destination": "/api/index.py" },
-    { "source": "/analyses/:path*", "destination": "/api/index.py" },
-    { "source": "/ai/:path*", "destination": "/api/index.py" },
-    { "source": "/health/:path*", "destination": "/api/index.py" }
+    {
+      "source": "/auth/:path*",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/analyses/:path*",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/ai/:path*",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/health/:path*",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
