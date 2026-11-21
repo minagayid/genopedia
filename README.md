@@ -1,5 +1,23 @@
 # Genopedia
 
+**Sequence tools today. Comparative regeneration research as the next research layer.**
+
+Genopedia's long-term research question is whether linked protein/RNA representations and context-rich expression evidence can help identify conserved regeneration-associated programs across sea stars, salamanders, and lizards. Kidney/nephron repair, beta-cell restoration, neural repair, and limb regeneration motivate that work, but they are separate, unproven translational goals. This repository does not demonstrate a regeneration therapy or a way to transfer animal traits into human DNA.
+
+Start with the [sourced research program](docs/regeneration-research-program.md), [proposed benchmark protocol](docs/regeneration-benchmark.md), and [literature-lead register](docs/regeneration-study-register.json). The register is not an acquired or validated training dataset.
+
+| Layer | Status | Entry point |
+|---|---|---|
+| Offline DNA/RNA inspection and local reports | Implemented software | Quick start below |
+| Protein/transcript identity, provenance, and evidence separation | Implemented data contract | [Protein data format](docs/protein-data-format.md) |
+| Optional authenticated API and container deployment | Present, requires API dependencies and configuration | [API deployment](docs/api-deployment.md) |
+| Comparative regeneration data curation and leakage-resistant evaluation | Research specification, not an implemented pipeline | [Benchmark](docs/regeneration-benchmark.md) |
+| Regeneration-specific ML, causal validation, and human translation | Not demonstrated in this repository | [Research limits and exit gates](docs/regeneration-research-program.md#current-status-and-exit-gates) |
+
+An externally trained NCBI-derived model may become a sequence backbone after its dataset, checkpoint, and evaluation artifacts are verified. No training-job status, model quality, or regeneration result is implied by this README.
+
+## Working toolkit
+
 Genopedia is an offline-first toolkit for inspecting DNA/RNA sequences and producing reproducible local reports. It is designed to run after download on a normal Python installation without TensorFlow, PyTorch, a database, or an internet connection.
 
 The repository also contains a provenance-first protein/genomics data contract. It is a normalized JSONL format with a machine-readable schema, deterministic catalog sorting, sequence SHA-256 deduplication, translation provenance fields, evidence separation, and an optional Jev semantic-ranking adapter. The contract is research-only: it is not for clinical use, synthesis, wet-lab execution, or organism engineering.
@@ -80,10 +98,17 @@ python run_genopedia.py demo
 
 ## Development
 
-Run the built-in test suite without installing pytest:
+Run the full built-in test suite, including the optional API tests (pytest is not required):
 
 ```powershell
+python -m pip install -e .[api]
 python -m unittest discover -s tests -v
+```
+
+The core runtime itself uses only the standard library. For a dependency-free core-only test run, exclude the optional API test module:
+
+```powershell
+python -c "import unittest; from pathlib import Path; loader=unittest.TestLoader(); suite=unittest.TestSuite(loader.discover('tests', pattern=p.name) for p in sorted(Path('tests').glob('test_*.py')) if p.name != 'test_api.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
 ```
 
 Install the package in editable mode if you want the `genopedia` command:
@@ -103,7 +128,7 @@ python -m pip install -e .[dev]  # pytest, formatting, and lint tools
 
 ## Release and deployment
 
-Genopedia is a local Python package and CLI, not a hosted web service. CI checks the supported Python versions, builds source and wheel distributions, validates their metadata, installs the wheel into a clean virtual environment, and smoke-tests the installed CLI outside the source checkout.
+The core toolkit is a local Python package and CLI and needs no hosted service. This repository also includes an optional authenticated FastAPI service and container setup; see [API deployment](docs/api-deployment.md) for that separate path. CI checks the supported Python versions, builds source and wheel distributions, validates their metadata, installs the wheel into a clean virtual environment, and smoke-tests the installed CLI outside the source checkout.
 
 For PyPI release setup, the release approval gate, and the versioned release checklist, see [docs/release-process.md](docs/release-process.md). Publishing requires a configured PyPI Trusted Publisher and approval in the GitHub `pypi` environment; no long-lived PyPI API token is stored in the repository.
 
@@ -130,7 +155,7 @@ data = read_input("large-sample.fasta", limits=limits)
 genopedia/
 ├── genopedia/       # dependency-free package and CLI
 ├── examples/        # runnable example
-├── docs/             # protein data format, workbook, and optional Jev adapter
+├── docs/            # research program, benchmark, protein contract, API/release docs
 ├── schema/           # machine-readable exported data contract
 ├── tests/           # standard-library tests
 ├── pyproject.toml   # install metadata and optional extras
