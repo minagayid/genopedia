@@ -34,6 +34,7 @@ _UNAVAILABLE_DETAIL="The Genopedia model is still in training and evaluation. Th
 class AIQuery(BaseModel):
     question:str=Field(min_length=1,max_length=4000)
     analysis_id:int|None=None
+    consent_to_model_processing:bool=False
 
 def _configured()->bool:
     return bool(AI_MODEL_BASE_URL and AI_MODEL_NAME) and AI_MODEL_STATE=="available"
@@ -44,7 +45,7 @@ def _status()->dict:
         "available":_configured(),
         "state":AI_MODEL_STATE if configured else (AI_MODEL_STATE or "training"),
         "model":AI_MODEL_NAME or None,
-        "message":"Model endpoint configured and available." if _configured() else _UNAVAILABLE_DETAIL,
+        "message":"Model endpoint configured; connectivity and answer quality are not verified by this status." if _configured() else _UNAVAILABLE_DETAIL,
     }
 
 @router.get("/status")
@@ -55,6 +56,8 @@ def ai_status():
 def ai_query(payload:AIQuery,db:Session=Depends(get_db),user:User=Depends(get_current_user)):
     if not _configured():
         raise HTTPException(503,detail={"state":_status()["state"],"message":_UNAVAILABLE_DETAIL})
+    if not payload.consent_to_model_processing:
+        raise HTTPException(400,detail="Please consent to sending your question and any selected analysis summary to the configured model service.")
     context=""
     if payload.analysis_id is not None:
         item=db.get(Analysis,payload.analysis_id)

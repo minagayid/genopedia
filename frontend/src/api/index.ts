@@ -85,3 +85,7 @@ export async function fetchReportHtml(id: number): Promise<string> {
 export async function aiStatus(): Promise<AIStatus> {
   return api<AIStatus>('/ai/status');
 }
+
+export async function askAi(question: string): Promise<{ answer: string; model: string }> {
+  return api('/ai/query', jsonBody({ question, consent_to_model_processing: true }));
+}
