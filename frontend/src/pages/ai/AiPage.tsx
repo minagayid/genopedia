@@ -25,6 +25,7 @@ export function AiPage() {
   async function submitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!consent || !question.trim()) return;
+    setConsent(false);
     setSending(true);
     setError('');
     setAnswer('');
@@ -41,7 +42,7 @@ export function AiPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <h1 className="mb-1 text-2xl font-bold">AI assistant</h1>
-      <p className="mb-6 text-sm text-slate-400">A research assistant grounded in your analysis results.</p>
+      <p className="mb-6 text-sm text-slate-400">Ask research questions about sequence analysis. This form does not send saved analyses.</p>
 
       {error && <p className="text-sm text-red-400">{error}</p>}
       {!status && !error && (
